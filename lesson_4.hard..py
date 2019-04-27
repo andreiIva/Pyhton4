@@ -1,0 +1,129 @@
+# Задание-1:
+# Матрицы в питоне реализуются в виде вложенных списков:
+# Пример Дано:
+matrix = [[1, 0, 8],
+          [3, 4, 1],
+          [0, 4, 2],]
+
+# Выполнить поворот(транспонирование) матрицы
+# Пример Результат:
+# matrix_rotate = [[1, 3, 0],
+#                  [0, 4, 4],
+#                  [8, 1, 2]]
+
+# Суть сложности hard: Решите задачу в одну строку
+print('задание №1')
+#print(np.matrix(matrix).transpose()) # EASY ))
+new_matrix = [ [matrix[i][j] for i in range(len(matrix))] for j in range(len(matrix[0])) ]
+print(new_matrix)
+
+# Задание-2:
+# Найдите наибольшее произведение пяти последовательных цифр в
+# 1000-значном числе.
+# Выведите произведение и индекс смещения первого числа последовательных 5-ти цифр
+# Пример 1000-значного числа:
+import re
+print('задание №2')
+number = """
+73167176531330624919225119674426574742355349194934
+96983520312774506326239578318016984801869478851843
+85861560789112949495459501737958331952853208805511
+12540698747158523863050715693290963295227443043557
+66896648950445244523161731856403098711121722383113
+62229893423380308135336276614282806444486645238749
+30358907296290491560440772390713810515859307960866
+70172427121883998797908792274921901699720888093776
+65727333001053367881220235421809751254540594752243
+52584907711670556013604839586446706324415722155397
+53697817977846174064955149290862569321978468622482
+83972241375657056057490261407972968652414535100474
+82166370484403199890008895243450658541227588666881
+16427171479924442928230863465674813919123162824586
+17866458359124566529476545682848912883142607690042
+24219022671055626321111109370544217506941658960408
+07198403850962455444362981230987879927244284909188
+84580156166097919133875499200524063689912560717606
+05886116467109405077541002256983155200055935729725
+716362695618826704282524836008"""
+
+def list_of_five_numbers(string):
+    patern = '(?=([0-9]{5}))'
+    result = re.findall(patern, string)
+    return result
+def product(string):
+    result = 1
+    for i in range(len(string)):
+        result *= int(string[i])
+    return result
+product_list = [product(i) for i in list_of_five_numbers(number)]
+max_product = max(product_list)
+print('Произведение {} и индекс {}'.format(str(max_product), str(product_list.index(max_product))))
+
+# Задание-3 (Ферзи):
+# Известно, что на доске 8×8 можно расставить 8 ферзей так, чтобы они не били
+# друг друга. Вам дана расстановка 8 ферзей на доске.
+# Определите, есть ли среди них пара бьющих друг друга.
+# Программа получает на вход восемь пар чисел,
+# каждое число от 1 до 8 — координаты 8 ферзей.
+# Если ферзи не бьют друг друга, выведите слово NO, иначе выведите YES.
+
+print('задание №3')
+#import numpy
+
+def add_matrix(matrix, vhod):
+    for v in vhod:
+        matrix[v[0] - 1][v[1] - 1] = 1
+    return matrix
+
+
+def search_chek_row(matrix):
+    result = '0'
+    n = len(matrix)
+    for offset in range(n):
+        sum_row1 = sum(matrix[offset])
+        if sum_row1 > 1:
+            result = "YES"
+            return result
+        else:
+            result = "NO"
+            continue
+
+    for i in range(n):
+        col_sum = sum([matrix[col][i] for col in range(n)])
+        if col_sum > 1:
+            result = "YES"
+            return result
+        else:
+            result = "NO"
+            continue
+    return result
+
+
+def searh_check_diag(matrix):
+    n = len(matrix)
+    sum1 = 0
+    sum2 = 0
+    for offset in range(-n + 1, n):
+        diag1 = [row[i + offset] for i, row in enumerate(zip(*matrix)) if 0 <= i + offset < len(row)]
+        diag2 = [row[n - offset - i - 1] for i, row in enumerate(zip(*matrix)) if 0 <= n - offset - i - 1 < len(row)]
+        sum1 += sum(diag1)
+        sum2 += sum(diag2)
+        sum_diag1 = sum(diag1)
+        sum_diag2 = sum(diag2)
+        result = 'YES' if sum_diag1 > 1 or sum_diag2 > 1 else 'NO'
+        if result == 'YES':
+            return
+        else:
+            continue
+
+    result = 'YES' if sum1 > 1 or sum2 > 1 else 'NO'
+    return result
+
+
+matrix = numpy.zeros((8, 8))
+vhod = [[1, 2], [8, 5], [4, 1], [2, 1], [4, 3], [7, 1], [8, 2], [1, 1]]
+matrix = add_matrix(matrix, vhod)
+search_mate_row = search_chek_row(matrix)
+search_mate_diag = searh_check_diag(matrix)
+result = search_mate_row if search_mate_row == "YES" else search_mate_diag
+print(result)
