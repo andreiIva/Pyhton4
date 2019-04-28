@@ -68,7 +68,7 @@ print('Произведение {} и индекс {}'.format(str(max_product), 
 # Если ферзи не бьют друг друга, выведите слово NO, иначе выведите YES.
 
 print('задание №3')
-#import numpy
+import numpy
 
 def add_matrix(matrix, vhod):
     for v in vhod:
